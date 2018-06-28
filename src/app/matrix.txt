@@ -1,0 +1,92 @@
+
+#include <iomanip>
+#include <complex>
+#include <iostream>
+using namespace std;
+
+#define MAX 10
+
+class MaTran
+{
+	public:
+		MaTran(int soHang, int soCot);
+		~MaTran();
+		void inMaTran(float a[][MAX],int soHang,int soCot);
+		void nhapMaTran();
+		void nhanMT_MT();
+	private:
+		int soHang,soCot;
+		float det;
+		float mt[MAX][MAX];
+};
+ 
+MaTran::MaTran(int soHang, int soCot){
+	this->soHang=soHang;
+	this->soCot=soCot;
+}
+
+MaTran::~MaTran(){
+	for(int i=0;i<MAX;i++)
+		for(int j=0;j<MAX;j++)
+			mt[i][j]=0;
+	soHang=soCot=det=0;
+}
+
+void MaTran::inMaTran(float a[][MAX],int soHang,int soCot){
+	cout<<fixed<<setprecision(2);
+	for(int i=0;i<soHang;i++){
+		cout<<"\n\t";
+		for(int j=0;j<soCot;j++) cout<<setw(5)<<a[i][j]<<" ";
+	}
+	cout<<endl;
+}
+
+void MaTran::nhapMaTran(){
+	for(int i=0;i<soHang;i++)
+		for(int j=0;j<soCot;j++){
+			cout<<"\tPhan tu ["<<i+1<<","<<j+1<<"] = ";
+			cin>>mt[i][j];
+		}
+	cout<<"Ma tran ban vua nhap la:";
+	inMaTran(mt,soHang,soCot);
+}
+
+void MaTran::nhanMT_MT(){
+	float b[MAX][MAX];
+	int cotB=10;
+	cout<<"Nhap so cot cua ma tran B: ";
+	cin>>cotB;
+	int hangB=soCot;
+	cout<<"\nNhap ma tran B:\n";
+	for(int i=0;i<hangB;i++)
+		for(int j=0;j<cotB;j++){
+			cout<<"\tPhan tu ["<<i+1<<","<<j+1<<"] = ";
+			cin>>b[i][j];
+		}
+	cout<<"Ma tran ban vua nhap la:";
+	inMaTran(b,hangB,cotB);
+	float tong[MAX][MAX]={};
+	for(int i=0;i<soHang;i++)
+		for(int j=0;j<cotB;j++){
+			for(int k=0;k<soCot;k++)
+				tong[i][j]+=mt[i][k]*b[k][j];
+		}
+	cout<<"Tich cua ma tran A va ma tran B la:";
+	inMaTran(tong,soHang,cotB);
+}
+
+int main()
+{
+   int soHang,soCot;
+	cout<<"Nhap so hang cua ma tran A: ";
+	cin>>soHang;
+	cout<<"Nhap so cot cua ma tran A: ";
+	cin>>soCot;
+	MaTran a(soHang,soCot);
+	cout<<"\nNhap ma tran A:\n";
+	a.nhapMaTran();
+		MaTran b(soHang,soCot);
+		b=a;
+		b.nhanMT_MT();
+	return 0;
+}
